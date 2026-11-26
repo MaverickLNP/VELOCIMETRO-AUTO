@@ -24,11 +24,18 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Compilar APK Debug
-        run: gradle assembleDebug
+      - name: Compilar APK Release sem assinatura
+        run: gradle assembleRelease
 
-      - name: Disponibilizar APK para download
+      - name: Gerar Keystore e Assinar APK Release
+        run: |
+          keytool -genkey -v -keystore release.keystore -alias maverick -keyalg RSA -keysize 2048 -validity 10000 -storepass android123 -keypass android123 -dname "CN=MaverickLNP, OU=Dev, O=Maverick, L=NovaIguacu, S=RJ, C=BR"
+          BUILD_TOOLS=$(ls -d $ANDROID_HOME/build-tools/* | tail -n 1)
+          $BUILD_TOOLS/zipalign -v -p 4 app/build/outputs/apk/release/app-release-unsigned.apk app-aligned.apk
+          $BUILD_TOOLS/apksigner sign --ks release.keystore --ks-pass pass:android123 --key-pass pass:android123 --out velocimetro-auto-release.apk app-aligned.apk
+
+      - name: Disponibilizar APK Assinado para download
         uses: actions/upload-artifact@v4
         with:
-          name: velocimetro-android-auto
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: velocimetro-android-auto-release
+          path: velocimetro-auto-release.apk
