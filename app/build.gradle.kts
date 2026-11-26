@@ -11,8 +11,8 @@ android {
         applicationId = "com.mavericklnp.velocimetroauto"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
     }
 
     buildTypes {
@@ -39,6 +39,10 @@ dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
+
+    // Biblioteca de Mídia (liberada para APK local no Android Auto)
     implementation("androidx.media:media:1.7.0")
+
+    // Leitura de GPS de alta precisão
     implementation("com.google.android.gms:play-services-location:21.3.0")
 }
