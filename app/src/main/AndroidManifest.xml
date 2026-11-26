@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Permissões necessárias para leitura de velocidade via GPS e execução em segundo plano -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <application
         android:allowBackup="true"
-        android:icon="@android:drawable/ic_menu_compass"
-        android:label="Velocímetro GPS"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Velocímetro Auto"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
 
+        <!-- Declaração obrigatória para o Android Auto identificar o app de mídia -->
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc" />
 
+        <!-- Ícone exibido na barra e grade do Android Auto -->
+        <meta-data
+            android:name="com.google.android.gms.car.notification.SmallIcon"
+            android:resource="@mipmap/ic_launcher" />
+
+        <!-- Tela principal no celular (para conceder permissões de GPS) -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,13 +37,16 @@
             </intent-filter>
         </activity>
 
+        <!-- Serviço de mídia lido pelo Android Auto na Ekiy M15 -->
         <service
             android:name=".SpeedMediaService"
-            android:exported="true">
+            android:exported="true"
+            android:foregroundServiceType="location|mediaPlayback">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
 
     </application>
+
 </manifest>
